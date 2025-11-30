@@ -3,6 +3,7 @@ import { NotificationContextContainer } from "../notificationContent";
 import { ServicesContextContainer } from "../servicesContext";
 import { BookingContextContainer } from "../bookingContext";
 import { MastersContextContainer } from "../mastersContext";
+import { LoginContextContainer } from "../loginContext";
 
 type Props = {
   children: ReactNode;
@@ -10,13 +11,15 @@ type Props = {
 
 const ContextsContainer = ({ children }: Props) => {
   return (
-    <NotificationContextContainer>
-      <MastersContextContainer>
-        <ServicesContextContainer>
-          <BookingContextContainer>{children}</BookingContextContainer>
-        </ServicesContextContainer>
-      </MastersContextContainer>
-    </NotificationContextContainer>
+    <LoginContextContainer>
+      <NotificationContextContainer>
+        <MastersContextContainer>
+          <ServicesContextContainer>
+            <BookingContextContainer>{children}</BookingContextContainer>
+          </ServicesContextContainer>
+        </MastersContextContainer>
+      </NotificationContextContainer>
+    </LoginContextContainer>
   );
 };
 

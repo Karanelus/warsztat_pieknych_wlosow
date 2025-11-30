@@ -2,12 +2,15 @@ import { useNavigate } from "react-router";
 import PageButton from "../../../@ui/PageButton";
 import AdminPanelOption from "./AdminPanelOption";
 import { adminOptions } from "./AdminPanel.data";
+import { useLoginContext } from "../../../@context/loginContext";
 
 const AdminPanel = () => {
   const nav = useNavigate();
 
+  const { user, logoutFn } = useLoginContext();
+
   const handleClickLogout = () => {
-    sessionStorage.removeItem("token");
+    logoutFn();
     nav("/admin");
   };
 
@@ -15,7 +18,7 @@ const AdminPanel = () => {
     <section className="relative grid gap-4">
       <hgroup>
         <h2>Panel admina</h2>
-        <p>Cześć, Natalka!</p>
+        <p>Cześć, {user?.user ?? "Natalka"}!</p>
         <p>
           Miło Cię widzieć tu znowu. Zarządzaj wszystkimi możliwymi danymi oraz
           umówionymi wizitami. Na dole odnajdziesz wszystkie opcję zarządzania
@@ -33,6 +36,7 @@ const AdminPanel = () => {
             mainImage={el.mainImage}
             supImage={el.supImage}
             supAnimation={el.supAnimation}
+            accessLevel={el.accessLevel}
           />
         ))}
       </section>

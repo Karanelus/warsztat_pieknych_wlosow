@@ -1,5 +1,5 @@
 .react-calendar {
-  @apply rounded-xl border px-4 py-2;
+  @apply space-y-2 rounded-xl border px-4 py-2;
 }
 
 .react-calendar__navigation {
@@ -26,12 +26,24 @@
   @apply bg-lime-200;
 }
 
+.react-calendar__month-view__days {
+  @apply grid! grid-cols-7! place-items-center gap-2;
+}
+
 .react-calendar__month-view__days__day--neighboringMonth {
-  @apply border-black bg-gray-200 text-gray-500;
+  @apply cursor-not-allowed! border-black bg-gray-200 text-gray-500;
+}
+
+.react-calendar__month-view__weekdays {
+  @apply mb-2 overflow-hidden rounded-full!;
+}
+
+.react-calendar__tile {
+  @apply w-1/2 rounded-full;
 }
 
 .react-calendar__tile[disabled]:not(
     .react-calendar__month-view__days__day--neighboringMonth
   ) {
-  @apply border-black text-gray-300;
+  @apply cursor-not-allowed border-black text-gray-300;
 }

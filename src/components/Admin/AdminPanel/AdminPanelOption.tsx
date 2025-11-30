@@ -1,6 +1,7 @@
 import { motion, Variants } from "framer-motion";
 import { NavLink } from "react-router";
 import Image from "../../../@ui/Image";
+import { useLoginContext } from "../../../@context/loginContext";
 
 type Props = {
   pageSrc: string;
@@ -9,6 +10,7 @@ type Props = {
   supAnimation: Variants;
   optionName: string;
   optionTitle: string;
+  accessLevel: number;
 };
 
 const textVariants = {
@@ -24,8 +26,12 @@ const AdminPanelOption = ({
   supAnimation,
   optionName,
   optionTitle,
+  accessLevel,
 }: Props) => {
+  const { user } = useLoginContext();
   const MotionNavLink = motion.create(NavLink);
+
+  if (user && user.role > accessLevel) return null;
 
   return (
     <MotionNavLink

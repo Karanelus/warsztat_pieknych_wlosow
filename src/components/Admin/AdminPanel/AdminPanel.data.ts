@@ -1,5 +1,6 @@
 export const adminOptions = [
   {
+    accessLevel: 2,
     pageSrc: "/admin/servicesManagement",
     mainImage: "/warsztat_pieknych_wlosow/img/admin/ServiceChanged.svg",
     supImage: "/warsztat_pieknych_wlosow/img/admin/gear.svg",
@@ -13,6 +14,7 @@ export const adminOptions = [
       "Dodawaj nowe, zmieniaj potrebne Ci właściwości oraz usuwaj zbędne",
   },
   {
+    accessLevel: 2,
     pageSrc: "/admin/bookingManagement",
     mainImage: "/warsztat_pieknych_wlosow/img/admin/BookingManagement.svg",
     supImage: "/warsztat_pieknych_wlosow/img/admin/pen.svg",
@@ -27,6 +29,7 @@ export const adminOptions = [
   },
 
   {
+    accessLevel: 1,
     pageSrc: "/admin/mastersManagement",
     mainImage: "/warsztat_pieknych_wlosow/img/admin/MastersManagement.svg",
     supImage: "/warsztat_pieknych_wlosow/img/admin/loop.svg",

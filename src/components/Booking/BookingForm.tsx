@@ -1,5 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import DropdownSelect from "../../@ui/DropdownSelect";
 import TimeSelection from "../../@ui/TimeSection/TimeSelection";
 import { addBookings } from "../../@api/booking.api";
@@ -21,7 +27,7 @@ import {
 } from "../../@constants/searchParams";
 import { useSearchParamsList } from "../../@hooks/useSearchParamsList.hook";
 
-const BookingForm = () => {
+const BookingForm: React.FC = () => {
   const {
     services,
     categories,
@@ -29,36 +35,97 @@ const BookingForm = () => {
     mastersOnService,
     loadingServices,
   } = useServicesContext();
+
   const { addNewNotification } = useNotificationContext();
   const { addBookingToCache } = useBookingContext();
-  const initialServices = servicesOnCategory(categories[0]);
-  const initialService = services.find((el) => el.name === initialServices[0]);
   const updateParam = useUpdateSearchParams();
   const { category: categoryParam, service: serviceParam } =
     useSearchParamsList();
 
-  const [isValidDate, setIsValidDate] = useState(true);
+  const initializedRef = useRef(false);
+
+  const canonicalCategory = useMemo(() => {
+    if (!categories || categories.length === 0) return "";
+    if (categoryParam && categories.includes(categoryParam))
+      return categoryParam;
+    return categories[0];
+  }, [categories, categoryParam]);
+
+  const serviceOptionsForCategory = useMemo(() => {
+    if (!canonicalCategory) return [] as string[];
+    return servicesOnCategory(canonicalCategory) ?? [];
+  }, [canonicalCategory, servicesOnCategory]);
+
+  const canonicalService = useMemo(() => {
+    if (!serviceOptionsForCategory || serviceOptionsForCategory.length === 0)
+      return "";
+    if (serviceParam && serviceOptionsForCategory.includes(serviceParam))
+      return serviceParam;
+    return serviceOptionsForCategory[0];
+  }, [serviceOptionsForCategory, serviceParam]);
+
+  const currentServiceObject = useMemo(() => {
+    return services.find((s) => s.name === canonicalService) ?? null;
+  }, [services, canonicalService]);
+
+  const defaultForm = useMemo(() => {
+    return {
+      fullName: "",
+      email: "",
+      category: canonicalCategory,
+      service: canonicalService,
+      last: currentServiceObject?.last ?? 0,
+      master: currentServiceObject?.masters?.[0] ?? "",
+      date: null as Date | null,
+    };
+  }, [canonicalCategory, canonicalService, currentServiceObject]);
 
   const [bookingForm, setBookingForm] = useState<
     Omit<Booking, "_id" | "isConfirmed"> & { category: string }
-  >({
-    fullName: "",
-    email: "",
-    category: categoryParam ?? categories[0],
-    service: serviceParam ?? initialServices[0],
-    last: initialService?.last ?? 0,
-    master: initialService?.masters[0] ?? "",
-    date: null,
-  });
+  >(defaultForm);
 
   const { fullName, email, category, service, master, date, last } =
     bookingForm;
 
-  const onChangeFormInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  useEffect(() => {
+    if (
+      !initializedRef.current &&
+      categories.length > 0 &&
+      services.length > 0
+    ) {
+      setBookingForm((prev) => ({
+        ...prev,
+        category: canonicalCategory,
+        service: canonicalService,
+        last: currentServiceObject?.last ?? prev.last,
+        master: currentServiceObject?.masters?.[0] ?? prev.master ?? "",
+      }));
 
-    setBookingForm((prev) => ({ ...prev, [name]: value }));
-  };
+      updateParam({
+        [CATEGORY_PARAM]: canonicalCategory,
+        [SERVICE_PARAM]: canonicalService,
+      });
+
+      initializedRef.current = true;
+    } else if (initializedRef.current) {
+      setBookingForm((prev) => ({
+        ...prev,
+        category: canonicalCategory,
+        service: canonicalService,
+        last: currentServiceObject?.last ?? prev.last,
+        master: currentServiceObject?.masters?.includes(prev.master)
+          ? prev.master
+          : (currentServiceObject?.masters?.[0] ?? ""),
+      }));
+    }
+  }, [
+    categories,
+    services,
+    canonicalCategory,
+    canonicalService,
+    currentServiceObject,
+    updateParam,
+  ]);
 
   const handleChangeFormOption = (
     name: string,
@@ -66,57 +133,43 @@ const BookingForm = () => {
     param?: string,
   ) => {
     setBookingForm((prev) => ({ ...prev, [name]: newOption }));
+
     if (param) {
-      updateParam({
-        [param]: newOption,
-      });
+      updateParam({ [param]: newOption });
     }
+  };
+
+  const onChangeFormInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setBookingForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleChangeDate = (newDate: Date | null) => {
     setBookingForm((prev) => ({ ...prev, date: newDate }));
     updateParam({
-      [SELECTED_DATE_PARAM]: dayjs(newDate).toISOString(),
+      [SELECTED_DATE_PARAM]: newDate ? dayjs(newDate).toISOString() : "",
     });
   };
 
-  useEffect(() => {
-    if (!categoryParam) {
-      updateParam({
-        [SERVICE_PARAM]: initialServices[0],
-        [CATEGORY_PARAM]: categories[0],
-      });
+  const [isValidDate, setIsValidDate] = useState(true);
+  const handleChangesValidDate = (
+    fullTime: string[] = [],
+    timeService: string[] = [],
+  ) => {
+    if (!Array.isArray(fullTime) || !Array.isArray(timeService)) {
+      setIsValidDate(true);
+      return;
     }
-  }, []);
 
-  useEffect(() => {
-    const found = services.find((el) => el.name === service);
+    const anyConflict = timeService.some((t) => !fullTime.includes(t));
 
-    if (found) {
-      setBookingForm((prev) => ({
-        ...prev,
-        last: found.last,
-        master: found.masters[0] || prev.master || "",
-      }));
-    }
-  }, [service, services]);
-
-  useEffect(() => {
-    if (!categoryParam) {
-      setBookingForm((prev) => ({
-        ...prev,
-        service: servicesOnCategory(category)[0],
-      }));
-      updateParam({
-        [SERVICE_PARAM]: servicesOnCategory(category)[0],
-        [CATEGORY_PARAM]: category,
-      });
-    }
-  }, [categoryParam]);
+    setIsValidDate(!anyConflict);
+  };
 
   const { mutate, isPending: loading } = useMutation({
-    mutationFn: (newBooking: Omit<Booking, "_id" | "isConfirmed">) =>
-      addBookings(newBooking),
+    mutationFn: (
+      newBooking: Omit<Booking, "_id" | "isConfirmed"> & { category?: string },
+    ) => addBookings(newBooking),
     onSuccess: (update: Booking) => {
       addBookingToCache(update);
       addNewNotification(
@@ -124,14 +177,22 @@ const BookingForm = () => {
         "Wizyta zapisana",
         "Wizyta została wysłana do weryfikacji. Proszę poczekać na potwierdzenie od salonu.",
       );
-      setBookingForm({
+
+      setBookingForm((prev) => ({
+        ...prev,
         fullName: "",
         email: "",
-        category: categories[0],
-        service: servicesOnCategory(categories[0])[0],
-        last: 0,
-        master: "",
+        category: canonicalCategory,
+        service: canonicalService,
+        last: currentServiceObject?.last ?? 0,
+        master: currentServiceObject?.masters?.[0] ?? "",
         date: null,
+      }));
+
+      updateParam({
+        [CATEGORY_PARAM]: canonicalCategory,
+        [SERVICE_PARAM]: canonicalService,
+        [SELECTED_DATE_PARAM]: "",
       });
     },
     onError: (e) => {
@@ -144,7 +205,7 @@ const BookingForm = () => {
     },
   });
 
-  const handleSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!proveForm(bookingForm))
@@ -165,105 +226,113 @@ const BookingForm = () => {
       return addNewNotification(
         "error",
         "Nieprawidłowe dane",
-        "Ustawiony przez ciebie czas będzie się nakładał na inną wizytę. Wybierz troczę inny czas.",
+        "Ustawiony przez ciebie czas będzie się nakładał na inną wizytę. Wybierz trochę inny czas.",
       );
 
     const found = services.find((el) => el.name === service);
-    const lastValue = found ? found.last : 0;
+    const lastValue = found ? found.last : last;
 
-    mutate({ fullName, email, service, master, last: lastValue, date });
+    mutate({
+      fullName,
+      email,
+      service,
+      master,
+      last: lastValue,
+      date,
+      category,
+    });
   };
 
-  const handleChangesValidDate = (
-    fullTime: string[],
-    timeService: string[],
-  ) => {
-    setIsValidDate(timeService.every((time) => fullTime.includes(time)));
-  };
+  const categoryOptions = categories ?? [];
+  const serviceOptions = serviceOptionsForCategory ?? [];
+  const masterOptions = mastersOnService(service) ?? [];
 
   return (
-    <>
-      <form
-        onSubmit={handleSubmitForm}
-        className={classNames("mobile:grid-cols-2 grid gap-4", {
-          "pointer-events-none opacity-50": loadingServices,
-        })}
-      >
-        <label>
-          <p className="font-bold">Imię i nazwisko</p>
-          <input
-            type="text"
-            value={fullName}
-            onChange={onChangeFormInput}
-            name="fullName"
-          />
-        </label>
-        <label>
-          <p className="font-bold">Email</p>
-          <input
-            type="text"
-            value={email}
-            onChange={onChangeFormInput}
-            name="email"
-          />
-        </label>
-        <DropdownSelect
-          name="category"
-          current={category}
-          options={categories}
-          param={CATEGORY_PARAM}
-          title="Wybież kategoriję"
-          onClickChangeCurrent={handleChangeFormOption}
+    <form
+      onSubmit={handleSubmitForm}
+      className={classNames("mobile:grid-cols-2 grid gap-4", {
+        "pointer-events-none opacity-50": loadingServices,
+      })}
+    >
+      <label>
+        <p className="font-bold">Imię i nazwisko</p>
+        <input
+          type="text"
+          value={fullName}
+          onChange={onChangeFormInput}
+          name="fullName"
         />
-        <DropdownSelect
-          name="service"
-          current={service}
-          param={SERVICE_PARAM}
-          options={servicesOnCategory(category) ?? []}
-          title="Wybież usługę"
-          onClickChangeCurrent={handleChangeFormOption}
-        />
-        <DropdownSelect
-          name="master"
-          current={master}
-          options={mastersOnService(service) ?? []}
-          onClickChangeCurrent={handleChangeFormOption}
-          title="Wybież mistrza"
-        />
-        <BookingExplaining />
+      </label>
 
-        <TimeSelection
-          last={last}
-          master={master}
-          onChangesValidDate={handleChangesValidDate}
-          onChangeDate={handleChangeDate}
+      <label>
+        <p className="font-bold">Email</p>
+        <input
+          type="text"
+          value={email}
+          onChange={onChangeFormInput}
+          name="email"
         />
-        <div className="mobile:col-span-2 grid place-items-center">
-          <button
-            type="submit"
-            className={classNames(
-              "grid place-items-center px-4 py-2",
-              "aspect-4/1 w-44 rounded-xl border",
-              "duration-150 hover:bg-black hover:text-white",
-              { "cursor-not-allowed": loading },
-            )}
-          >
-            {loading ? (
-              <>
-                <img
-                  src={loadingImage}
-                  alt="Loading"
-                  loading="lazy"
-                  className="size-4 animate-spin"
-                />
-              </>
-            ) : (
-              "Zarezerwuj wizytę"
-            )}
-          </button>
-        </div>
-      </form>
-    </>
+      </label>
+
+      <DropdownSelect
+        name="category"
+        current={category}
+        options={categoryOptions}
+        param={CATEGORY_PARAM}
+        title="Wybież kategorię"
+        onClickChangeCurrent={handleChangeFormOption}
+      />
+
+      <DropdownSelect
+        name="service"
+        current={service}
+        param={SERVICE_PARAM}
+        options={serviceOptions}
+        title="Wybież usługę"
+        onClickChangeCurrent={handleChangeFormOption}
+      />
+
+      <DropdownSelect
+        name="master"
+        current={master}
+        options={masterOptions}
+        onClickChangeCurrent={handleChangeFormOption}
+        title="Wybież mistrza"
+      />
+
+      <BookingExplaining />
+
+      <TimeSelection
+        last={last}
+        master={master}
+        onChangesValidDate={handleChangesValidDate}
+        onChangeDate={handleChangeDate}
+      />
+
+      <div className="mobile:col-span-2 grid place-items-center">
+        <button
+          type="submit"
+          className={classNames(
+            "grid place-items-center px-4 py-2",
+            "aspect-4/1 w-44 rounded-xl border",
+            "duration-150 hover:bg-black hover:text-white",
+            { "cursor-not-allowed": loading },
+          )}
+          disabled={loading}
+        >
+          {loading ? (
+            <img
+              src={loadingImage}
+              alt="Loading"
+              loading="lazy"
+              className="size-4 animate-spin"
+            />
+          ) : (
+            "Zarezerwuj wizytę"
+          )}
+        </button>
+      </div>
+    </form>
   );
 };
 

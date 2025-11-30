@@ -1,80 +1,45 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import AdminLogin from "./AdminLogin";
 import { Outlet, useNavigate } from "react-router";
-import { logIn } from "../../@api/admin.api";
-import { useMutation } from "@tanstack/react-query";
+import { useLoginContext } from "../../@context/loginContext";
 
 const Admin = () => {
+  const { user, loginFn, loginLoading, loginError } = useLoginContext();
   const nav = useNavigate();
-  const token = sessionStorage.getItem("token");
 
   const [{ login, password }, setAdminData] = useState({
     login: "",
     password: "",
   });
-  const [logged, setLogged] = useState(false);
-
-  const { mutate, isPending, error } = useMutation({
-    mutationFn: ({ login, password }: { login: string; password: string }) =>
-      logIn(login, password),
-    onSuccess: (data) => {
-      setAdminData({ login: "", password: "" });
-
-      if (data.token) {
-        sessionStorage.setItem("token", data.token);
-        logInAdmin();
-      } else {
-        throw new Error("Invalid credentials");
-      }
-    },
-    onError: () => {
-      setAdminData({
-        login: "",
-        password: "",
-      });
-
-      throw new Error("Wrong data");
-    },
-  });
-
-  const logInAdmin = useCallback(() => {
-    setLogged(true);
-    nav("panel");
-  }, [nav]);
-
-  useEffect(() => {
-    if (token) {
-      return logInAdmin();
-    }
-
-    setLogged(false);
-  }, [logInAdmin, token]);
 
   const handleChangeData = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setAdminData((prev) => ({ ...prev, [name]: value, error: false }));
   };
 
+  useEffect(() => {
+    if (user) {
+      nav("panel");
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   const handleSubmitLogin = async (e: FormEvent) => {
     e.preventDefault();
-    mutate({ login, password });
+    loginFn({ login, password });
+    nav("panel");
   };
 
   return (
     <section data-testid="admin">
       <h1>Strona administratora</h1>
-      {!logged && (
+      {!user && (
         <AdminLogin
           onSubmitLogin={handleSubmitLogin}
           onChangeInput={handleChangeData}
-          loading={isPending}
-          error={error}
+          loading={loginLoading}
+          error={loginError}
         />
       )}
       <Outlet />
