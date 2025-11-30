@@ -4,11 +4,22 @@ import BookingManagementInfo from "./BookingManagementInfo";
 import { AnimatePresence } from "motion/react";
 import loadingImage from "/loading.svg";
 import { useBookingContext } from "../../../../@context/bookingContext";
+import { useLoginContext } from "../../../../@context/loginContext";
+import { useMemo } from "react";
 
 const BookingManagement = () => {
   const { bookings, loadingBooking, errorBooking } = useBookingContext();
+  const { user } = useLoginContext();
 
   const nav = useNavigate();
+
+  const accessedBooking = useMemo(() => {
+    if (user && user.role > 1) {
+      return bookings.filter((book) => book.master === user.user);
+    }
+
+    return bookings;
+  }, [bookings, user]);
 
   const handleClickBack = () => {
     nav(-1);
@@ -41,12 +52,12 @@ const BookingManagement = () => {
             )}
 
             {!loadingBooking &&
-              bookings.length > 0 &&
-              bookings.map((booking) => (
+              accessedBooking.length > 0 &&
+              accessedBooking.map((booking) => (
                 <BookingManagementInfo key={booking._id} booking={booking} />
               ))}
 
-            {!loadingBooking && bookings.length === 0 && (
+            {!loadingBooking && accessedBooking.length === 0 && (
               <h3>Nie ma umówionych wizyt</h3>
             )}
           </AnimatePresence>

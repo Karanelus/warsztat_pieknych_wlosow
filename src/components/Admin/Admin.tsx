@@ -28,7 +28,6 @@ const Admin = () => {
   const handleSubmitLogin = async (e: FormEvent) => {
     e.preventDefault();
     loginFn({ login, password });
-    nav("panel");
   };
 
   return (

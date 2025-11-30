@@ -7,12 +7,14 @@ import { useLoginContext } from "../../../@context/loginContext";
 const AdminPanel = () => {
   const nav = useNavigate();
 
-  const { user, logoutFn } = useLoginContext();
+  const { user, logoutFn, loginLoading } = useLoginContext();
 
   const handleClickLogout = () => {
     logoutFn();
     nav("/admin");
   };
+
+  if (loginLoading) return null;
 
   return (
     <section className="relative grid gap-4">
