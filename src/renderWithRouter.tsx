@@ -7,10 +7,10 @@ const queryClient = new QueryClient();
 
 export const renderWithRouter = (ui: React.ReactElement, route = "/") => {
   return render(
-    <QueryClientProvider client={queryClient}>
-      <ContextsContainer>
-        <MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>
-      </ContextsContainer>
-    </QueryClientProvider>,
+    <MemoryRouter initialEntries={[route]}>
+      <QueryClientProvider client={queryClient}>
+        <ContextsContainer>{ui}</ContextsContainer>
+      </QueryClientProvider>
+    </MemoryRouter>,
   );
 };
