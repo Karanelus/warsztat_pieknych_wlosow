@@ -3,7 +3,7 @@ import NotificationsContainer from "./NotificationsContainer";
 import { AnimatePresence } from "framer-motion";
 import { useNotificationContext } from "../../@context/notificationContent";
 import { useBookingContext } from "../../@context/bookingContext";
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 const Notifications = () => {
   const { notifications = [], addNewNotification } = useNotificationContext();
