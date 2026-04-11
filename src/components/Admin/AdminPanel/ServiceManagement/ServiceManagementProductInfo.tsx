@@ -31,7 +31,7 @@ const ServiceManagementProductInfo = ({ product, onCLickOpen }: Props) => {
             product.cost.map((el, i) => (
               <CategoryText
                 key={i}
-                category={product.options[i]}
+                category={product.options[i] ?? ""}
                 body={String(el)}
                 isCost={true}
               />

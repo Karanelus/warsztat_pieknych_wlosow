@@ -14,8 +14,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "lint:html": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0 --format html > lint.html",
     "eslint": "eslint . --cache --cache-location .eslintcache --max-warnings 0 --fix",
-    "tsc": "tsc",
-    "precommit": "npx prettier --write . && npm run eslint && npm run lint && npm run tsc"
+    "precommit": "npx prettier --write . && npm run eslint && npm run lint && tsc -p tsconfig.app.json --noEmit"
   },
   "dependencies": {
     "@tailwindcss/vite": "4.0.6",

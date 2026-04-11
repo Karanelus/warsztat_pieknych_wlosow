@@ -1,26 +1,40 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "es2022",
-    "useDefineForClassFields": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2022",
     "lib": ["ES2023", "DOM", "ESNext", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "jsx": "react-jsx",
+    "rootDir": "./",
+
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@api/*": ["./src/@api/*"],
+      "@constants/*": ["./src/@constants/*"],
+      "@context/*": ["./src/@context/*"],
+      "@hooks/*": ["./src/@hooks/*"],
+      "@models/*": ["./src/@types/*"],
+      "@languages/*": ["./src/@languages/*"],
+      "@ui/*": ["./src/@ui/*"]
+    },
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "noUncheckedIndexedAccess": true,
+    "allowUnusedLabels": false,
+    "allowArbitraryExtensions": false
   },
   "include": ["src", "vite.config.ts", "test/setupTests.ts"]
 }

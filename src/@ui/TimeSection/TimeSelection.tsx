@@ -70,7 +70,7 @@ const TimeSelection = ({
     const [h, m] = firstTime.split(":").map(Number);
 
     const date = dayjs(selectedDate);
-    date.hour(h).minute(m);
+    date.hour(h ?? 0).minute(m ?? 0);
 
     return date;
   });
@@ -80,8 +80,8 @@ const TimeSelection = ({
 
     const currentTime = timeString(bookTime.hour(), bookTime.minute());
     if (!timeArray.includes(currentTime)) {
-      const [h, m] = timeArray[0].split(":").map(Number);
-      setBookTime(dataChange(selectedDate, h, m));
+      const [h, m] = (timeArray[0] ?? "").split(":").map(Number);
+      setBookTime(dataChange(selectedDate, h ?? 0, m ?? 0));
     }
   }, [timeArray, selectedDate, master]);
 
@@ -106,12 +106,12 @@ const TimeSelection = ({
     const newTimesArray = newTimes(newDate);
     const firstTime = newTimesArray[0] ?? "09:00";
     const [h, m] = firstTime.split(":").map(Number);
-    setBookTime(dataChange(newDate, h, m));
+    setBookTime(dataChange(newDate, h ?? 0, m ?? 0));
   };
 
   const handleClickBookClock = (time: string) => {
     const [h, m] = time.split(":").map(Number);
-    setBookTime(dataChange(selectedDate, h, m));
+    setBookTime(dataChange(selectedDate, h ?? 0, m ?? 0));
   };
 
   return (

@@ -187,7 +187,11 @@ const BookingManagementInfo = ({ booking }: Props) => {
             </hgroup>
             <article>
               {infoArray.map(([category, body], i) => (
-                <CategoryText key={i} category={category} body={body} />
+                <CategoryText
+                  key={i}
+                  category={category ?? ""}
+                  body={body ?? ""}
+                />
               ))}
             </article>
             <section className="grid grid-cols-3 gap-2">

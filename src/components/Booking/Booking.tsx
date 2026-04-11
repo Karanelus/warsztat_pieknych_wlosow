@@ -8,7 +8,10 @@ const Booking = () => {
       <h1>Jak do nas się zapisać</h1>
 
       <section className="space-y-2">
-        <BookingTitle title={bookingText[0].title} text={bookingText[0].text} />
+        <BookingTitle
+          title={bookingText[0]?.title ?? ""}
+          text={bookingText[0]?.text ?? ""}
+        />
       </section>
 
       <section className="space-y-2">

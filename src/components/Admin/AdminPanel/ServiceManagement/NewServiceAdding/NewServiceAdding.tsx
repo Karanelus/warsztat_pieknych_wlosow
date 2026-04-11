@@ -228,7 +228,7 @@ const NewServiceAdding = ({ onClickAddNewService }: Props) => {
 
     setNewForm((prev) => ({
       ...prev,
-      image: files[0],
+      image: files[0] ?? null,
     }));
   };
 

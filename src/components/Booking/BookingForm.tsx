@@ -48,7 +48,7 @@ const BookingForm: React.FC = () => {
     if (!categories || categories.length === 0) return "";
     if (categoryParam && categories.includes(categoryParam))
       return categoryParam;
-    return categories[0];
+    return categories[0] ?? "";
   }, [categories, categoryParam]);
 
   const serviceOptionsForCategory = useMemo(() => {
@@ -61,7 +61,7 @@ const BookingForm: React.FC = () => {
       return "";
     if (serviceParam && serviceOptionsForCategory.includes(serviceParam))
       return serviceParam;
-    return serviceOptionsForCategory[0];
+    return serviceOptionsForCategory[0] ?? "";
   }, [serviceOptionsForCategory, serviceParam]);
 
   const currentServiceObject = useMemo(() => {
@@ -72,8 +72,8 @@ const BookingForm: React.FC = () => {
     return {
       fullName: "",
       email: "",
-      category: canonicalCategory,
-      service: canonicalService,
+      category: canonicalCategory ?? "",
+      service: canonicalService ?? "",
       last: currentServiceObject?.last ?? 0,
       master: currentServiceObject?.masters?.[0] ?? "",
       date: null as Date | null,

@@ -257,7 +257,7 @@ const ServiceManagementProductEdit = ({
 
     setForm((prev) => ({
       ...prev,
-      image: files[0],
+      image: files[0] ?? null,
     }));
   };
 

@@ -91,9 +91,9 @@ const Gallery = ({ gallery, scrollDirection }: Props) => {
       <AnimatePresence initial={false} custom={direction}>
         <ImageMain
           key={image}
-          src={gallery[imageIndex]}
+          src={gallery[imageIndex] ?? ""}
           direction={direction}
-          alt={gallery[imageIndex]}
+          alt={gallery[imageIndex] ?? ""}
           variants={variantsOption.animation}
           transition={variantsOption.transition as Transition}
         />
