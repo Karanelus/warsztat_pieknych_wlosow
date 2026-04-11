@@ -10,6 +10,7 @@ import {
 import dayjs from "dayjs";
 import { Booking } from "../@types/booking.type";
 import { getBookings } from "../@api/booking.api";
+import { useQuery } from "@tanstack/react-query";
 
 type Props = {
   children: ReactNode;
@@ -17,35 +18,17 @@ type Props = {
 
 const useBooking = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [loadingBooking, setLoadingBooking] = useState<boolean>(true);
-  const [errorBooking, setErrorBooking] = useState<Error | null>(null);
+
+  const { data, isFetching, error } = useQuery({
+    queryKey: ["booking"],
+    queryFn: getBookings,
+  });
 
   useEffect(() => {
-    let mounted = true;
-
-    const fetchBookings = async () => {
-      try {
-        setLoadingBooking(true);
-        const data = await getBookings();
-        if (mounted) {
-          setBookings([...data].sort((a, b) => dayjs(a.date!).diff(b.date!)));
-          setErrorBooking(null);
-        }
-      } catch (err) {
-        if (mounted) setErrorBooking(err as Error);
-      } finally {
-        if (mounted) setLoadingBooking(false);
-      }
-    };
-
-    fetchBookings();
-    const interval = setInterval(fetchBookings, 60000);
-
-    return () => {
-      mounted = false;
-      clearInterval(interval);
-    };
-  }, []);
+    if (data) {
+      setBookings(data);
+    }
+  }, [data]);
 
   const addBookingToCache = (newBooking: Booking) => {
     if (!newBooking) return;
@@ -70,8 +53,8 @@ const useBooking = () => {
 
   return {
     bookings: sortedBookings,
-    loadingBooking,
-    errorBooking,
+    loadingBooking: isFetching,
+    errorBooking: error,
     addBookingToCache,
     updateBookingInCache,
     deleteBookingFromCache,

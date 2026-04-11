@@ -31,7 +31,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "noUncheckedIndexedAccess": true,
+    "allowUnusedLabels": false,
+    "allowArbitraryExtensions": false
   },
   "include": ["src", "vite.config.ts", "test/setupTests.ts"]
 }

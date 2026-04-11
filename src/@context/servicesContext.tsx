@@ -10,15 +10,18 @@ import {
 import { Services } from "../@types/services.type";
 import { getServices } from "../@api/services.api";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParamsList } from "../@hooks/useSearchParamsList.hook";
 
 type Props = {
   children: ReactNode;
 };
 
 const useService = () => {
+  const { serviceQ } = useSearchParamsList();
+
   const { data, isPending, error } = useQuery({
-    queryKey: ["services"],
-    queryFn: getServices,
+    queryKey: ["services", serviceQ],
+    queryFn: () => getServices(serviceQ),
     refetchInterval: 60000,
   });
 
@@ -26,6 +29,7 @@ const useService = () => {
 
   useEffect(() => {
     if (data) {
+      console.log(data);
       setServices(data);
     }
   }, [data]);

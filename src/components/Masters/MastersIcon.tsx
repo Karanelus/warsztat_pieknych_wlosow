@@ -2,6 +2,7 @@ import { NavLink } from "react-router";
 import { motion } from "framer-motion";
 import Image from "../../@ui/Image";
 import { MasterType } from "../../@types/masterType.type";
+import { formatExperience } from "../../@helpers/formatExperience.helper";
 
 type Props = {
   master: MasterType;
@@ -17,7 +18,7 @@ const MastersIcon = ({ master }: Props) => {
   const MotionNavLink = motion.create(NavLink);
 
   const masterProfessionText = master.profession.join(" | ") ?? "";
-  const masterExpirianceText = `${master.experience} lat doświadczenia`;
+  const masterExpirianceText = formatExperience(master.experience);
 
   return (
     <MotionNavLink

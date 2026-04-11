@@ -19,7 +19,7 @@ const useLogin = () => {
 
   const { data: userData } = useQuery({
     queryKey: ["userData"],
-    queryFn: () => tokenProve(),
+    queryFn: tokenProve,
   });
 
   useEffect(() => {

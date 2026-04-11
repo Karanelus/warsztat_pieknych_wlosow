@@ -5,8 +5,8 @@ const baseUrl = import.meta.env.VITE_API_URL + "api/services";
 
 type ServiceAPI = Omit<Services, "_id" | "image"> & { image: File | null };
 
-export const getServices = async () => {
-  const res = await axios.get<Services[]>(baseUrl);
+export const getServices = async (query: string | undefined) => {
+  const res = await axios.get<Services[]>(baseUrl, { params: { q: query } });
 
   return res.data;
 };
