@@ -28,7 +28,6 @@ const useService = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       setServices(data);
     }
   }, [data]);

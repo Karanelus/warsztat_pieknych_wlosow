@@ -3,12 +3,18 @@ import PageButton from "../../../../@ui/PageButton";
 import loadingImage from "/loading.svg";
 import AddIcon from "/img/Add.svg";
 import { useMastersContext } from "../../../../@context/mastersContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import MasterManagementInfo from "./MasterManagementInfo";
+import NewMasters from "./MastersDrawer/NewMasters/NewMasters";
+import EditMasters from "./MastersDrawer/EditMasters/EditMasters";
 
 const MastersManagement = () => {
   const { masters, mastersLoading } = useMastersContext();
+  const [{ isEdit, isNew }, setMastersWindows] = useState({
+    isEdit: false,
+    isNew: false,
+  });
   const nav = useNavigate();
   const [activeMaster, setActiveMaster] = useState<number | null>(null);
 
@@ -16,16 +22,20 @@ const MastersManagement = () => {
     nav(-1);
   };
 
-  useEffect(() => {
-    console.log(activeMaster);
-  }, [activeMaster]);
-
   const handleClickMaster = (id: number) => {
     setActiveMaster(id);
   };
 
   const handleCloseMaster = () => {
     setActiveMaster(null);
+  };
+
+  const handleCLickOpenWindowNew = () => {
+    setMastersWindows((prev) => ({ ...prev, isNew: !prev.isNew }));
+  };
+
+  const handleCLickOpenWindowEdit = () => {
+    setMastersWindows((prev) => ({ ...prev, isEdit: !prev.isEdit }));
   };
 
   return (
@@ -50,9 +60,12 @@ const MastersManagement = () => {
               activeMaster={activeMaster}
               onClickMaster={handleClickMaster}
               onCloseMaster={handleCloseMaster}
+              onCLickOpenWindowEdit={handleCLickOpenWindowEdit}
             />
           ))}
-          <div
+          <button
+            type="button"
+            onClick={handleCLickOpenWindowNew}
             className={classNames(
               "relative rounded-xl duration-150",
               "flex aspect-square items-center justify-center overflow-hidden",
@@ -60,10 +73,14 @@ const MastersManagement = () => {
             )}
           >
             <img src={AddIcon} alt="add" className="size-16" />
-          </div>
+          </button>
         </section>
       )}
       <PageButton text="< Wstecz" onClick={handleClickBack} />
+      {isNew && <NewMasters onCLickOpenWindowNew={handleCLickOpenWindowNew} />}
+      {isEdit && (
+        <EditMasters onCLickOpenWindowEdit={handleCLickOpenWindowEdit} />
+      )}
     </div>
   );
 };

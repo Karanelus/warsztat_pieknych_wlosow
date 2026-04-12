@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import ServiceManagementProduct from "../../ServiceManagementProduct";
+import ServiceManagementProduct from "../../ServiceManagementProduct/ServiceManagementProduct";
 import { Services } from "@models/services.type";
 
 type Props = {

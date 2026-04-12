@@ -1,5 +1,5 @@
 import { Services } from "@models/services.type";
-import ServiceManagementProduct from "../../ServiceManagementProduct";
+import ServiceManagementProduct from "../../ServiceManagementProduct/ServiceManagementProduct";
 
 type Props = {
   services: Services[];

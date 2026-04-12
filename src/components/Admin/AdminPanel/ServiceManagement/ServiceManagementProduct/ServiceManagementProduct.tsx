@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Services } from "../../../../@types/services.type";
+import { Services } from "../../../../../@types/services.type";
 import { motion, Variants } from "framer-motion";
-import ServiceManagementProductInfo from "./ServiceManagementProductInfo";
+import ServiceManagementProductInfo from "./Info/ServiceManagementProductInfo";
 import classNames from "classnames";
 import Expand from "/Expand.svg";
 
-import ServiceManagementProductEdit from "./ServiceManagementProductEdit";
+import ServiceManagementProductEdit from "./Edit/ServiceManagementProductEdit";
 
 type Props = {
   product: Services;

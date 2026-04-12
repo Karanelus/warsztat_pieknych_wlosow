@@ -1,21 +1,21 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Services } from "../../../../../@types/services.type";
-import { postService } from "../../../../../@api/services.api";
+import { postService } from "@api/services.api";
 import Confirm from "/Confirm.svg";
 import Cancel from "/Cancel.svg";
 import { produce } from "immer";
-import { useNotificationContext } from "../../../../../@context/notificationContent";
-import { useServicesContext } from "../../../../../@context/servicesContext";
+import { useNotificationContext } from "@context/notificationContent";
+import { useServicesContext } from "@context/servicesContext";
 import { useMutation } from "@tanstack/react-query";
-import { motion, Variants } from "framer-motion";
-import ButtonServices from "../../../../../@ui/ServicesManagement/ButtonServices";
-import InputServicesString from "../../../../../@ui/ServicesManagement/Inputs/InputServicesString";
-import InputServicesFile from "../../../../../@ui/ServicesManagement/Inputs/InputServicesFile";
-import OptionsMultiple from "../../../../../@ui/ServicesManagement/Inputs/Option/OptionsMultiple/OptionsMultiple";
-import OptionsSingle from "../../../../../@ui/ServicesManagement/Inputs/Option/OptionsSingle/OptionsSingle";
-import InputServiceTime from "../../../../../@ui/ServicesManagement/Inputs/InputServiceTime";
-import { useKeydown } from "../../../../../@hooks/useKeydown.hook";
-import Masters from "../../../../../@ui/ServicesManagement/Inputs/Masters/Masters";
+import ButtonServices from "@ui/ServicesManagement/ButtonServices";
+import InputServicesString from "@ui/ServicesManagement/Inputs/InputServicesString";
+import InputServicesFile from "@ui/ServicesManagement/Inputs/InputServicesFile";
+import OptionsMultiple from "@ui/ServicesManagement/Inputs/Option/OptionsMultiple/OptionsMultiple";
+import OptionsSingle from "@ui/ServicesManagement/Inputs/Option/OptionsSingle/OptionsSingle";
+import InputServiceTime from "@ui/ServicesManagement/Inputs/InputServiceTime";
+import { useKeydown } from "@hooks/useKeydown.hook";
+import Masters from "@ui/ServicesManagement/Inputs/Masters/Masters";
+import DrawerContainer from "@ui/DrawerContainer";
+import { Services } from "@models/services.type";
 
 type Props = {
   onClickAddNewService: () => void;
@@ -25,12 +25,6 @@ const INPUT_TEXT: ["name" | "category", string][] = [
   ["name", "Nazwa"],
   ["category", "Kategoria"],
 ];
-
-const newServiceVariants: Variants = {
-  initial: { opacity: 0, scale: 1.05 },
-  exit: { opacity: 0, scale: 1.05 },
-  animate: { opacity: 1, scale: 1 },
-};
 
 type ServiceData = Omit<Services, "_id" | "image">;
 
@@ -233,16 +227,7 @@ const NewServiceAdding = ({ onClickAddNewService }: Props) => {
   };
 
   return (
-    <motion.section
-      variants={newServiceVariants}
-      initial="initial"
-      exit="exit"
-      animate="animate"
-      transition={{
-        duration: 0.3,
-      }}
-      className="module"
-    >
+    <DrawerContainer>
       <div className="mobile:w-[max(400px,60dvw)] m-6 w-full space-y-3 rounded-2xl bg-white p-6">
         <h2>Dodawanie nowej usługi</h2>
         <form onSubmit={handleSubmitForm}>
@@ -313,7 +298,7 @@ const NewServiceAdding = ({ onClickAddNewService }: Props) => {
           </section>
         </form>
       </div>
-    </motion.section>
+    </DrawerContainer>
   );
 };
 

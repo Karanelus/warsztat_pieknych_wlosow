@@ -1,21 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { Services } from "../../../../@types/services.type";
+import { Services } from "../../../../../../@types/services.type";
 import Confirm from "/Confirm.svg";
 import Cancel from "/Cancel.svg";
 import Delete from "/Delete.svg";
-import { useServicesContext } from "../../../../@context/servicesContext";
-import { useNotificationContext } from "../../../../@context/notificationContent";
+import { useServicesContext } from "../../../../../../@context/servicesContext";
+import { useNotificationContext } from "../../../../../../@context/notificationContent";
 import { produce } from "immer";
 import { useMutation } from "@tanstack/react-query";
-import { deleteService, updateService } from "../../../../@api/services.api";
-import ButtonServices from "../../../../@ui/ServicesManagement/ButtonServices";
-import InputServicesString from "../../../../@ui/ServicesManagement/Inputs/InputServicesString";
-import InputServicesFile from "../../../../@ui/ServicesManagement/Inputs/InputServicesFile";
-import OptionsMultiple from "../../../../@ui/ServicesManagement/Inputs/Option/OptionsMultiple/OptionsMultiple";
-import OptionsSingle from "../../../../@ui/ServicesManagement/Inputs/Option/OptionsSingle/OptionsSingle";
-import InputServiceTime from "../../../../@ui/ServicesManagement/Inputs/InputServiceTime";
-import Masters from "../../../../@ui/ServicesManagement/Inputs/Masters/Masters";
+import {
+  deleteService,
+  updateService,
+} from "../../../../../../@api/services.api";
+import ButtonServices from "../../../../../../@ui/ServicesManagement/ButtonServices";
+import InputServicesString from "../../../../../../@ui/ServicesManagement/Inputs/InputServicesString";
+import InputServicesFile from "../../../../../../@ui/ServicesManagement/Inputs/InputServicesFile";
+import OptionsMultiple from "../../../../../../@ui/ServicesManagement/Inputs/Option/OptionsMultiple/OptionsMultiple";
+import OptionsSingle from "../../../../../../@ui/ServicesManagement/Inputs/Option/OptionsSingle/OptionsSingle";
+import InputServiceTime from "../../../../../../@ui/ServicesManagement/Inputs/InputServiceTime";
+import Masters from "../../../../../../@ui/ServicesManagement/Inputs/Masters/Masters";
 
 type ServicesData = Omit<Services, "_id" | "image">;
 
@@ -104,7 +107,6 @@ const ServiceManagementProductEdit = ({
       form: ServicesData & { image: File | null };
     }) => await updateService(id, form),
     onSuccess: (updated: Services) => {
-      console.log(updated);
       updateServiceInCache(updated);
       onClickEdit();
 

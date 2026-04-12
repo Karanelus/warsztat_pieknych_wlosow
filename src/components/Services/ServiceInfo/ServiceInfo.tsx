@@ -1,27 +1,18 @@
-import { Variants, motion } from "framer-motion";
-import { Services } from "../../../@types/services.type";
+import { Services } from "@models/services.type";
 import Cancel from "/Cancel.svg";
-import CategoryText from "../../../@ui/CategoryText";
+import CategoryText from "@ui/CategoryText";
 import { masterText, timeLast } from "../Services.data";
-import Image from "../../../@ui/Image";
+import Image from "@ui/Image";
 import ServiceInfoOptions from "./ServiceInfoOptions";
-import { useKeydown } from "../../../@hooks/useKeydown.hook";
+import { useKeydown } from "@hooks/useKeydown.hook";
 import { NavLink } from "react-router";
-import {
-  CATEGORY_PARAM,
-  SERVICE_PARAM,
-} from "../../../@constants/searchParams";
+import { CATEGORY_PARAM, SERVICE_PARAM } from "@constants/searchParams";
 import { appUrls, toLink } from "../../../appUrls";
+import DrawerContainer from "@ui/DrawerContainer";
 
 type Props = {
   service: Services;
   onClickRemoveService: () => void;
-};
-
-const newServiceVariants: Variants = {
-  initial: { opacity: 0, scale: 1.05 },
-  exit: { opacity: 0, scale: 1.05 },
-  animate: { opacity: 1, scale: 1 },
 };
 
 const ServiceInfo = ({ service, onClickRemoveService }: Props) => {
@@ -30,16 +21,7 @@ const ServiceInfo = ({ service, onClickRemoveService }: Props) => {
   useKeydown("Escape", onClickRemoveService, service !== null);
 
   return (
-    <motion.section
-      variants={newServiceVariants}
-      initial="initial"
-      exit="exit"
-      animate="animate"
-      transition={{
-        duration: 0.3,
-      }}
-      className="module"
-    >
+    <DrawerContainer>
       <section className="relative space-y-2 rounded-xl bg-white p-6">
         <h2>{name}</h2>
 
@@ -81,7 +63,7 @@ const ServiceInfo = ({ service, onClickRemoveService }: Props) => {
           <img src={Cancel} alt="Close" />
         </button>
       </section>
-    </motion.section>
+    </DrawerContainer>
   );
 };
 

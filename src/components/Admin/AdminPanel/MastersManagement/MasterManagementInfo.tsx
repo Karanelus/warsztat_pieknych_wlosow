@@ -11,6 +11,7 @@ type Props = {
   activeMaster: number | null;
   onClickMaster: (id: number) => void;
   onCloseMaster: () => void;
+  onCLickOpenWindowEdit: () => void;
 };
 
 const MasterManagementInfo = ({
@@ -18,6 +19,7 @@ const MasterManagementInfo = ({
   activeMaster,
   onClickMaster,
   onCloseMaster,
+  onCLickOpenWindowEdit,
 }: Props) => {
   const { _id, name, image, experience, profession } = master;
 
@@ -71,6 +73,7 @@ const MasterManagementInfo = ({
         >
           <button
             type="button"
+            onClick={onCLickOpenWindowEdit}
             className={classNames(
               "serviceManagementButton p-0.5",
               "size-8! border-2! border-black bg-gray-200",
