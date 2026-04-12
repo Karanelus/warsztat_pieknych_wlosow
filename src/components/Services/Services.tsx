@@ -4,7 +4,7 @@ import { useServicesContext } from "../../@context/servicesContext";
 import Searchbar from "../../@ui/Searchbar/Searchbar";
 import { useUpdateSearchParams } from "../../@hooks/useUpdateSearchParams.hook";
 import { SERVICE_QUERY_PARAM } from "../../@constants/searchParams";
-import ServicesSearch from "./ServicesSearch/ServicesSearch";
+import ServicesSearch from "../../@ui/SearchResults/SearchResults";
 
 const Services = () => {
   const { errorServices, loadingServices } = useServicesContext();

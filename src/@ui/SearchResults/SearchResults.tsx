@@ -3,7 +3,7 @@ import { useSearchParamsList } from "@hooks/useSearchParamsList.hook";
 import { useUpdateSearchParams } from "@hooks/useUpdateSearchParams.hook";
 import classNames from "classnames";
 
-const ServicesSearch = () => {
+const SearchResults = () => {
   const { serviceQ } = useSearchParamsList();
   const updateParams = useUpdateSearchParams();
 
@@ -30,4 +30,4 @@ const ServicesSearch = () => {
   );
 };
 
-export default ServicesSearch;
+export default SearchResults;

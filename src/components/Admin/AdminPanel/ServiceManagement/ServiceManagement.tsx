@@ -1,20 +1,28 @@
 import { useNavigate } from "react-router";
 import PageButton from "../../../../@ui/PageButton";
 import { useState } from "react";
-import ServiceManagementCategory from "./ServiceManagementCategory";
+import ServiceManagementCategory from "./ServiceManagementCategory/ServiceManagementCategory";
 import loadingImage from "/loading.svg";
 import classNames from "classnames";
 import NewServiceAdding from "./NewServiceAdding/NewServiceAdding";
 import useScrollLock from "../../../../@hooks/useScrollLock.hook";
 import { useServicesContext } from "../../../../@context/servicesContext";
 import { AnimatePresence } from "framer-motion";
+import Searchbar from "@ui/Searchbar/Searchbar";
+import { useUpdateSearchParams } from "@hooks/useUpdateSearchParams.hook";
+import { SERVICE_QUERY_PARAM } from "@constants/searchParams";
+import SearchResults from "@ui/SearchResults/SearchResults";
 
 const ServiceManagement = () => {
-  const { splittedServices, errorServices, loadingServices } =
-    useServicesContext();
+  const { errorServices, loadingServices } = useServicesContext();
+  const updateParams = useUpdateSearchParams();
 
   const nav = useNavigate();
   const [newServiceAdding, setNewServiceAdding] = useState(false);
+
+  const handleServicesQuery = (query: string) => {
+    updateParams({ [SERVICE_QUERY_PARAM]: query });
+  };
 
   useScrollLock(newServiceAdding);
 
@@ -37,6 +45,12 @@ const ServiceManagement = () => {
     <section className="relative flex flex-col space-y-4">
       <h2>Zarządzanie usługami</h2>
       <section className="grid gap-4">
+        <Searchbar
+          name="serviceSearchbar"
+          placeholder="Wpisz nazwę usługi"
+          onSubmit={handleServicesQuery}
+        />
+        <SearchResults />
         {loadingServices ? (
           <div className="flex size-5">
             <img
@@ -47,13 +61,7 @@ const ServiceManagement = () => {
             />
           </div>
         ) : (
-          Object.entries(splittedServices).map(([category, items]) => (
-            <ServiceManagementCategory
-              key={category}
-              categoryName={category}
-              categoryServices={items}
-            />
-          ))
+          <ServiceManagementCategory />
         )}
       </section>
 
