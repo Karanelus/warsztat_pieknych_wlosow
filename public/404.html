@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      const path =
+        window.location.pathname.replace("/warsztat_pieknych_wlosow", "") ||
+        "/";
+      const search = window.location.search;
+      const hash = window.location.hash;
+      window.location.replace(
+        "/warsztat_pieknych_wlosow/?redirect=" +
+          encodeURIComponent(path + search + hash),
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
