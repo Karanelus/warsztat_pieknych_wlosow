@@ -15,7 +15,6 @@ const useMasters = () => {
   } = useQuery({
     queryKey: ["masters"],
     queryFn: getMasters,
-    refetchInterval: 60000,
   });
 
   return {

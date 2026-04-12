@@ -22,7 +22,6 @@ const useService = () => {
   const { data, isPending, error } = useQuery({
     queryKey: ["services", serviceQ],
     queryFn: () => getServices(serviceQ),
-    refetchInterval: 60000,
   });
 
   const [services, setServices] = useState<Services[]>([]);

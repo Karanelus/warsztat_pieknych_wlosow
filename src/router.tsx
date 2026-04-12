@@ -1,4 +1,4 @@
-import { createHashRouter } from "react-router";
+import { createBrowserRouter } from "react-router";
 import Main from "./components/Main/Main";
 import Admin from "./components/Admin/Admin";
 import Masters from "./components/Masters/Masters";
@@ -14,10 +14,11 @@ import BookingManagement from "./components/Admin/AdminPanel/BookingManagement/B
 import { appUrls } from "./appUrls";
 import MastersManagement from "./components/Admin/AdminPanel/MastersManagement/MastersManagement";
 
-export const router = createHashRouter(
+export const router = createBrowserRouter(
   [
     {
       path: appUrls.ROOT,
+
       Component: App,
       children: [
         { index: true, Component: Main },
@@ -41,6 +42,6 @@ export const router = createHashRouter(
     },
   ],
   {
-    // basename: "/warsztat_pieknych_wlosow/",
+    basename: "/warsztat_pieknych_wlosow/",
   },
 );

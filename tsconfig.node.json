@@ -23,7 +23,7 @@
       "@hooks/*": ["./src/@hooks/*"],
       "@models/*": ["./src/@types/*"],
       "@languages/*": ["./src/@languages/*"],
-      "@ui/*": ["./src/@ui/*"]
+      "@ui/*": ["./src/@ui/*"],
     },
 
     /* Linting */
