@@ -1,7 +1,8 @@
-import { motion, Variants } from "framer-motion";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import { ReactNode } from "react";
 
 type Props = {
+  isVisible: boolean;
   children: ReactNode;
 };
 
@@ -11,20 +12,24 @@ const newServiceVariants: Variants = {
   animate: { opacity: 1, scale: 1 },
 };
 
-const DrawerContainer = ({ children }: Props) => {
+const DrawerContainer = ({ isVisible, children }: Props) => {
   return (
-    <motion.section
-      variants={newServiceVariants}
-      initial="initial"
-      exit="exit"
-      animate="animate"
-      transition={{
-        duration: 0.3,
-      }}
-      className="module"
-    >
-      {children}
-    </motion.section>
+    <AnimatePresence>
+      {isVisible && (
+        <motion.section
+          variants={newServiceVariants}
+          initial="initial"
+          exit="exit"
+          animate="animate"
+          transition={{
+            duration: 0.3,
+          }}
+          className="module"
+        >
+          {children}
+        </motion.section>
+      )}
+    </AnimatePresence>
   );
 };
 

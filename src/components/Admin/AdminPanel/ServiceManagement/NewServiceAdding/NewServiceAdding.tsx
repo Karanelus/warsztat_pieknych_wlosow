@@ -18,6 +18,7 @@ import DrawerContainer from "@ui/DrawerContainer";
 import { Services } from "@models/services.type";
 
 type Props = {
+  isVisible: boolean;
   onClickAddNewService: () => void;
 };
 
@@ -28,7 +29,7 @@ const INPUT_TEXT: ["name" | "category", string][] = [
 
 type ServiceData = Omit<Services, "_id" | "image">;
 
-const NewServiceAdding = ({ onClickAddNewService }: Props) => {
+const NewServiceAdding = ({ isVisible, onClickAddNewService }: Props) => {
   const { addServiceToCache } = useServicesContext();
   const { addNewNotification } = useNotificationContext();
   const [isChecked, setIsChecked] = useState(false);
@@ -227,7 +228,7 @@ const NewServiceAdding = ({ onClickAddNewService }: Props) => {
   };
 
   return (
-    <DrawerContainer>
+    <DrawerContainer isVisible={isVisible}>
       <div className="mobile:w-[max(400px,60dvw)] m-6 w-full space-y-3 rounded-2xl bg-white p-6">
         <h2>Dodawanie nowej usługi</h2>
         <form onSubmit={handleSubmitForm}>

@@ -11,36 +11,39 @@ import { appUrls, toLink } from "../../../appUrls";
 import DrawerContainer from "@ui/DrawerContainer";
 
 type Props = {
-  service: Services;
+  service: Services | null;
   onClickRemoveService: () => void;
 };
 
 const ServiceInfo = ({ service, onClickRemoveService }: Props) => {
-  const { name, category, masters, last, image, cost, options } = service;
+  const { name, category, masters, last, image, cost, options } = service ?? {};
 
   useKeydown("Escape", onClickRemoveService, service !== null);
 
   return (
-    <DrawerContainer>
+    <DrawerContainer isVisible={Boolean(service)}>
       <section className="relative space-y-2 rounded-xl bg-white p-6">
         <h2>{name}</h2>
 
         <section className="flex">
           <section className="space-y-4">
             <article>
-              <CategoryText category="Kategoria" body={category} />
+              <CategoryText category="Kategoria" body={category ?? ""} />
               <CategoryText
-                category={masterText(masters)}
-                body={masters.join(", ") ?? ""}
+                category={masterText(masters ?? [])}
+                body={(masters ?? []).join(", ") ?? ""}
               />
-              <CategoryText category="Trwanie wizyty" body={timeLast(last)} />
+              <CategoryText
+                category="Trwanie wizyty"
+                body={timeLast(last ?? 0)}
+              />
             </article>
             <article>
-              <ServiceInfoOptions cost={cost} options={options} />
+              <ServiceInfoOptions cost={cost ?? 0} options={options ?? []} />
             </article>
           </section>
           <div className="mobile:size-80 size-30 shrink-0 rounded-xl">
-            <Image src={image!} alt={name} />
+            <Image src={image!} alt={name ?? ""} />
           </div>
         </section>
 
@@ -48,7 +51,7 @@ const ServiceInfo = ({ service, onClickRemoveService }: Props) => {
           <NavLink
             to={{
               pathname: toLink(appUrls.BOOKING),
-              search: `${SERVICE_PARAM}=${encodeURI(name)}&${CATEGORY_PARAM}=${encodeURI(category)}`,
+              search: `${SERVICE_PARAM}=${encodeURI(name ?? "")}&${CATEGORY_PARAM}=${encodeURI(category ?? "")}`,
             }}
           >
             <button className="bookingButton">Zapisać się</button>

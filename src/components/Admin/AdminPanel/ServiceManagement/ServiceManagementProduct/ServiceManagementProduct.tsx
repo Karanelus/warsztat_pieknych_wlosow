@@ -88,7 +88,7 @@ const ServiceManagementProduct = ({ product }: Props) => {
             "grid-rows-[1fr]": isOpen,
           })}
         >
-          <div className="mt-2 overflow-hidden">
+          <div className="min-h-0 overflow-hidden">
             {isEditing ? (
               <ServiceManagementProductEdit
                 product={product}

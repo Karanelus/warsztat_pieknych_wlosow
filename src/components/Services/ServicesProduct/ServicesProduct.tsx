@@ -4,7 +4,6 @@ import Image from "../../../@ui/Image";
 import ServicesProductText from "./ServicesProductText";
 import ServiceInfo from "../ServiceInfo/ServiceInfo";
 import useScrollLock from "../../../@hooks/useScrollLock.hook";
-import { AnimatePresence } from "framer-motion";
 import { useUpdateSearchParams } from "../../../@hooks/useUpdateSearchParams.hook";
 import {
   CATEGORY_PARAM,
@@ -49,14 +48,10 @@ const ServicesProduct = ({ product }: Props) => {
         </button>
       </section>
 
-      <AnimatePresence>
-        {service && (
-          <ServiceInfo
-            service={service}
-            onClickRemoveService={handleClickRemoveService}
-          />
-        )}
-      </AnimatePresence>
+      <ServiceInfo
+        service={service}
+        onClickRemoveService={handleClickRemoveService}
+      />
     </section>
   );
 };

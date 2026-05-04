@@ -20,10 +20,11 @@
       "@api/*": ["./src/@api/*"],
       "@constants/*": ["./src/@constants/*"],
       "@context/*": ["./src/@context/*"],
+      "@helpers/*": ["./src/@helpers/*"],
       "@hooks/*": ["./src/@hooks/*"],
       "@models/*": ["./src/@types/*"],
       "@languages/*": ["./src/@languages/*"],
-      "@ui/*": ["./src/@ui/*"],
+      "@ui/*": ["./src/@ui/*"]
     },
 
     /* Linting */

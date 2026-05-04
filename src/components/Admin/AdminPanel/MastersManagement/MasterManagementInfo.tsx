@@ -1,10 +1,11 @@
-import { MasterType } from "../../../../@types/masterType.type";
+import { MasterType } from "@models/masterType.type";
 import classNames from "classnames";
-import Image from "../../../../@ui/Image";
+import Image from "@ui/Image";
 import Edit from "/Edit.svg";
+import { motion } from "framer-motion";
 import Cancel from "/Cancel.svg";
+import { formatExperience } from '@helpers/formatExperience.helper';
 
-import { formatExperience } from "../../../../@helpers/formatExperience.helper";
 
 type Props = {
   master: MasterType;
@@ -32,10 +33,12 @@ const MasterManagementInfo = ({
   };
 
   return (
-    <div
+    <motion.div
+      layout
       onClick={handleClickMaster}
+      transition={{ layout: { duration: 0.75, ease: "easeInOut" } }}
       className={classNames(
-        "relative items-end rounded-xl duration-150",
+        "relative items-end rounded-xl",
         "flex aspect-square cursor-pointer overflow-hidden",
         "hover:inset-shadow-sm hover:inset-shadow-gray-900",
         { "col-span-2 row-span-2 cursor-default!": isActiveMaster },
@@ -65,7 +68,7 @@ const MasterManagementInfo = ({
         <section
           className={classNames(
             "flex gap-2",
-            "absolute top-7 right-7",
+            "absolute top-4 right-4",
             isActiveMaster
               ? "cursor-pointer opacity-100"
               : "pointer-events-none opacity-0",
@@ -94,7 +97,7 @@ const MasterManagementInfo = ({
         </section>
       </section>
       <Image isAbsolute src={image} alt={name} />
-    </div>
+    </motion.div>
   );
 };
 

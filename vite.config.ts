@@ -15,6 +15,7 @@ export default defineConfig({
       "@api": resolve(__dirname, "./src/@api"),
       "@constants": resolve(__dirname, "./src/@constants"),
       "@context": resolve(__dirname, "./src/@context"),
+      "@helpers": resolve(__dirname, "./src/@helpers"),
       "@hooks": resolve(__dirname, "./src/@hooks"),
       "@models": resolve(__dirname, "./src/@types"),
       "@languages": resolve(__dirname, "./src/@languages"),

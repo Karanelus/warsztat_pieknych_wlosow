@@ -1,20 +1,17 @@
 import { useNavigate } from "react-router";
-import PageButton from "../../../../@ui/PageButton";
+import PageButton from "@ui/PageButton";
 import loadingImage from "/loading.svg";
 import AddIcon from "/img/Add.svg";
-import { useMastersContext } from "../../../../@context/mastersContext";
+import { useMastersContext } from "@context/mastersContext";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import classNames from "classnames";
 import MasterManagementInfo from "./MasterManagementInfo";
-import NewMasters from "./MastersDrawer/NewMasters/NewMasters";
-import EditMasters from "./MastersDrawer/EditMasters/EditMasters";
+import NewMasters from "./MastersDrawer/MastersDrawer";
 
 const MastersManagement = () => {
   const { masters, mastersLoading } = useMastersContext();
-  const [{ isEdit, isNew }, setMastersWindows] = useState({
-    isEdit: false,
-    isNew: false,
-  });
+  const [isEdited, setEdited] = useState(false);
   const nav = useNavigate();
   const [activeMaster, setActiveMaster] = useState<number | null>(null);
 
@@ -30,12 +27,8 @@ const MastersManagement = () => {
     setActiveMaster(null);
   };
 
-  const handleCLickOpenWindowNew = () => {
-    setMastersWindows((prev) => ({ ...prev, isNew: !prev.isNew }));
-  };
-
-  const handleCLickOpenWindowEdit = () => {
-    setMastersWindows((prev) => ({ ...prev, isEdit: !prev.isEdit }));
+  const handleCLickOpenDrawer = () => {
+    setEdited((prev) => !prev);
   };
 
   return (
@@ -51,36 +44,41 @@ const MastersManagement = () => {
           />
         </div>
       )}
-      {!mastersLoading && masters && (
-        <section className="mobile:grid-cols-2 tablet:grid-cols-4 grid grid-cols-1 gap-5">
-          {masters.map((master) => (
-            <MasterManagementInfo
-              key={master._id}
-              master={master}
-              activeMaster={activeMaster}
-              onClickMaster={handleClickMaster}
-              onCloseMaster={handleCloseMaster}
-              onCLickOpenWindowEdit={handleCLickOpenWindowEdit}
-            />
-          ))}
-          <button
-            type="button"
-            onClick={handleCLickOpenWindowNew}
-            className={classNames(
-              "relative rounded-xl duration-150",
-              "flex aspect-square items-center justify-center overflow-hidden",
-              "inset-ring-2 inset-ring-gray-200",
-            )}
-          >
-            <img src={AddIcon} alt="add" className="size-16" />
-          </button>
-        </section>
-      )}
+      <section className="mobile:grid-cols-2 tablet:grid-cols-4 grid grid-cols-1 gap-5">
+        {!mastersLoading && masters && (
+          <>
+            {masters.map((master) => (
+              <MasterManagementInfo
+                key={master._id}
+                master={master}
+                activeMaster={activeMaster}
+                onClickMaster={handleClickMaster}
+                onCloseMaster={handleCloseMaster}
+                onCLickOpenWindowEdit={handleCLickOpenDrawer}
+              />
+            ))}
+            <motion.button
+              layout
+              transition={{ layout: { duration: 0.37, ease: "linear" } }}
+              type="button"
+              onClick={handleCLickOpenDrawer}
+              className={classNames(
+                "relative rounded-xl duration-150",
+                "flex aspect-square items-center justify-center overflow-hidden",
+                "inset-ring-2 inset-ring-gray-200",
+              )}
+            >
+              <img src={AddIcon} alt="add" className="size-16" />
+            </motion.button>
+          </>
+        )}
+      </section>
+
       <PageButton text="< Wstecz" onClick={handleClickBack} />
-      {isNew && <NewMasters onCLickOpenWindowNew={handleCLickOpenWindowNew} />}
-      {isEdit && (
-        <EditMasters onCLickOpenWindowEdit={handleCLickOpenWindowEdit} />
-      )}
+      <NewMasters
+        isVisible={isEdited}
+        onCLickOpenWindowNew={handleCLickOpenDrawer}
+      />
     </div>
   );
 };

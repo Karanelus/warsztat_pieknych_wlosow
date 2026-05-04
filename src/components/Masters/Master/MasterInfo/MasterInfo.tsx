@@ -1,4 +1,4 @@
-import Image from "../../../@ui/Image";
+import Image from "../../../../@ui/Image";
 
 type Props = {
   name: string;

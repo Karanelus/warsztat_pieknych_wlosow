@@ -1,5 +1,4 @@
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import Footer from "./@ui/Footer/Footer.tsx";
 import { lazy, Suspense, useEffect } from "react";
 import Loading from "./components/Loading.tsx";
 import { motion, useScroll } from "motion/react";
@@ -7,6 +6,7 @@ import usePageHeight from "./@hooks/usePageHeight.hook.ts";
 import { useLocation } from "react-router";
 import Notifications from "./@ui/Notifications/Notifications.tsx";
 import ContextsContainer from "./@context/contextsContainer/ContextsContainer.tsx";
+import Header from "@ui/Header/Header.tsx";
 
 const Layout = lazy(() => import("./components/Layout.tsx"));
 

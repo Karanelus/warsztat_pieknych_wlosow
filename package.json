@@ -27,14 +27,12 @@
     "i18next": "24.2.2",
     "immer": "10.1.1",
     "motion": "12.38.0",
-    "nookies": "2.5.2",
     "react": "19.2.5",
     "react-calendar": "6.0.0",
     "react-dom": "19.2.5",
     "react-router": "7.14.0",
     "react-router-dom": "7.14.0",
-    "reatc": "0.0.1-security",
-    "uuid": "11.1.0"
+    "uuid": "14.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "7.27.2",
@@ -43,8 +41,8 @@
     "@tailwindcss/vite": "4.2.2",
     "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
-    "@types/react": "19.0.8",
-    "@types/react-dom": "19.0.3",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "4.3.4",
     "babel-jest": "30.2.0",
     "eslint": "9.39.4",

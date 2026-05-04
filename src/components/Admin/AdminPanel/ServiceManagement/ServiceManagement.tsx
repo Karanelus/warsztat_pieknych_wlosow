@@ -7,7 +7,6 @@ import classNames from "classnames";
 import NewServiceAdding from "./NewServiceAdding/NewServiceAdding";
 import useScrollLock from "../../../../@hooks/useScrollLock.hook";
 import { useServicesContext } from "../../../../@context/servicesContext";
-import { AnimatePresence } from "framer-motion";
 import Searchbar from "@ui/Searchbar/Searchbar";
 import { useUpdateSearchParams } from "@hooks/useUpdateSearchParams.hook";
 import { SERVICE_QUERY_PARAM } from "@constants/searchParams";
@@ -77,11 +76,10 @@ const ServiceManagement = () => {
 
       <PageButton text="< Wstecz" onClick={handleClickBack} />
 
-      <AnimatePresence>
-        {newServiceAdding && (
-          <NewServiceAdding onClickAddNewService={handleClickAddNewService} />
-        )}
-      </AnimatePresence>
+      <NewServiceAdding
+        isVisible={newServiceAdding}
+        onClickAddNewService={handleClickAddNewService}
+      />
     </section>
   );
 };
